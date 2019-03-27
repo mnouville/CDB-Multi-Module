@@ -1,5 +1,6 @@
 package servlet;
 
+import java.security.Principal;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -16,8 +17,10 @@ import exceptions.ValidationException;
 import mappers.MapperDto;
 import model.Company;
 import model.Computer;
+import model.User;
 import service.ServiceCompany;
 import service.ServiceComputer;
+import service.ServiceUser;
 import validator.Validator;
 
 /**
@@ -34,15 +37,22 @@ public class AddComputerServlet  {
   private ServiceCompany serviceCompany;
   
   @Autowired
+  private ServiceUser serviceUser;
+  
+  @Autowired
   private Validator validator;
   
   @Autowired
   private MapperDto mapper;
 
   @GetMapping
-  protected ModelAndView doGet(ModelAndView modelView) throws SQLException {
+  protected ModelAndView doGet(ModelAndView modelView, Principal principal) throws SQLException {
     List<Company> companies;
     companies = this.serviceCompany.getCompanies();
+    
+    String login = principal.getName(); //get logged in username
+    User user = this.serviceUser.getUser(login);
+    modelView.addObject("user",user);
     modelView.addObject("companies", companies);
     modelView.setViewName("AddComputer");
     return modelView;

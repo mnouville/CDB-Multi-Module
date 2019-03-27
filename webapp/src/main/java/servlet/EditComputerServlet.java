@@ -1,5 +1,6 @@
 package servlet;
 
+import java.security.Principal;
 import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.List;
@@ -17,8 +18,10 @@ import exceptions.ValidationException;
 import mappers.MapperDto;
 import model.Company;
 import model.Computer;
+import model.User;
 import service.ServiceCompany;
 import service.ServiceComputer;
+import service.ServiceUser;
 import validator.Validator;
 
 /**
@@ -35,20 +38,31 @@ public class EditComputerServlet {
   private ServiceCompany serviceCompany;
   
   @Autowired
+  private ServiceUser serviceUser;
+  
+  @Autowired
   private Validator validator;
   
   @Autowired
   private MapperDto mapper;
 
   @GetMapping
-  protected ModelAndView doGet(WebRequest request, ModelAndView modelView) throws SQLException {
-    int id = Integer.parseInt(request.getParameter("id"));
-    Computer computer = this.serviceComputer.getComputer(id);
-    modelView.addObject("idcomputer", id);
-    modelView.addObject("name", computer.getName());
-    modelView.addObject("introduced", computer.getIntroduced()  == null ? null : computer.getIntroduced().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-    modelView.addObject("discontinued", computer.getIntroduced()  == null ? null : computer.getDiscontinued().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-    modelView.addObject("companyid", computer.getCompany().getId());
+  protected ModelAndView doGet(WebRequest request, ModelAndView modelView, Principal principal) throws SQLException {
+    if (request.getParameterMap().containsKey("id")) { 
+      int id = Integer.parseInt(request.getParameter("id")); 
+      Computer computer = this.serviceComputer.getComputer(id);
+      modelView.addObject("name", computer.getName());
+      modelView.addObject("introduced", computer.getIntroduced()  == null ? null : computer.getIntroduced().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+      modelView.addObject("discontinued", computer.getIntroduced()  == null ? null : computer.getDiscontinued().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+      modelView.addObject("companyid", computer.getCompany().getId());
+      modelView.addObject("idcomputer", id);
+    } else {
+      modelView.addObject("error","true");
+    }
+    String login = principal.getName(); //get logged in username
+    User user = this.serviceUser.getUser(login);
+    modelView.addObject("user",user);
+    
     List<Company> companies;
     companies = this.serviceCompany.getCompanies();
     modelView.addObject("companies", companies);
