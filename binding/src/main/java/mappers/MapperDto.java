@@ -109,9 +109,9 @@ public class MapperDto {
   }
   
   public UserDto userToUserDto(User user) {
-    return new UserDto(user.getId()+"", user.getLogin(), user.getPassword(), user.getFirstname(), user.getLastname(), user.getLastname(),
-                       user.getEnabled()+"", user.getAccountNonExpired()+"", user.getCredentialsNonExpired()+"", 
-                       user.getAccountNonBlocked()+"" );
+    return new UserDto(user.getId()+"", user.getLogin(), user.getPassword(), user.getFirstname(), user.getLastname(),
+                       user.getEmail(), user.getRole()+"", user.getEnabled()+"", user.getAccountNonExpired()+"", 
+                       user.getCredentialsNonExpired()+"", user.getAccountNonBlocked()+"" );
   }
   
   public User dtoToUser(UserDto user) {
@@ -120,7 +120,7 @@ public class MapperDto {
     boolean accountNonExpired = user.getAccountNonExpired() == "true" ? true : false;
     boolean credentialsNonExpired = user.getCredentialsNonExpired() == "true" ? true : false;
     boolean accountNonBlocked = user.getAccountNonLocked() == "true" ? true : false;
-    return new User(id,user.getLogin(), user.getPassword(), user.getFirstname(), user.getLastname(), user.getEmail(),
+    return new User(id,user.getLogin(), user.getPassword(), user.getFirstname(), user.getLastname(), user.getEmail(),Integer.parseInt(user.getRole()),
                        enabled, accountNonExpired, credentialsNonExpired, accountNonBlocked);
   }
   

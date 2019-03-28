@@ -8,12 +8,13 @@ public class UserDto {
   private String firstname;
   private String lastname;
   private String email;
+  private String role;
   private String enabled;
   private String accountNonExpired;
   private String credentialsNonExpired;
   private String accountNonLocked; 
   
-  public UserDto(String id, String login, String password, String firstname, String lastname, String email,
+  public UserDto(String id, String login, String password, String firstname, String lastname, String email, String role,
                  String enabled, String accountNonExpired, String credentialsNonExpired, String accountNonLocked) {
     this.id = id;
     this.login = login;
@@ -73,6 +74,14 @@ public class UserDto {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+  
+  public String getRole() {
+    return role;
+  }
+  
+  public void setRole(String role) {
+    this.role = role;
   }
 
   public String getEnabled() {

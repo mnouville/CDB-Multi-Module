@@ -17,7 +17,7 @@
 <body>
 
 <c:choose>
-	<c:when test="${user.role == 1 && error != \"true\"}">
+	<c:when test="${user.role == 1 && error != 'true'}">
 	    <header class="navbar navbar-inverse navbar-fixed-top">
 	        <div class="container">
 	            <a class="navbar-brand" href="<c:url value="/"/>"><spring:message code="application.title"/></a>
