@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,21 +29,22 @@ import validator.Validator;
 @RequestMapping("/AddComputer")
 public class AddComputerServlet  {
 
-  @Autowired
   private ServiceComputer serviceComputer;
-  
-  @Autowired
   private ServiceCompany serviceCompany;
-  
-  @Autowired
   private ServiceUser serviceUser;
   
-  @Autowired
   private Validator validator;
-  
-  @Autowired
   private MapperDto mapper;
 
+  public AddComputerServlet(ServiceComputer serviceComputer, ServiceCompany serviceCompany, ServiceUser serviceUser,
+                            Validator validator, MapperDto mapper) {
+    this.serviceComputer = serviceComputer;
+    this.serviceCompany = serviceCompany;
+    this.serviceUser = serviceUser;
+    this.validator = validator;
+    this.mapper = mapper;
+  }
+  
   @GetMapping
   protected ModelAndView doGet(ModelAndView modelView, Principal principal) throws SQLException {
     List<Company> companies;

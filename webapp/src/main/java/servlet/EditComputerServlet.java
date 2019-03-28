@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,21 +30,22 @@ import validator.Validator;
 @RequestMapping("/EditComputer")
 public class EditComputerServlet {
 
-  @Autowired
   private ServiceComputer serviceComputer;
-  
-  @Autowired
   private ServiceCompany serviceCompany;
-  
-  @Autowired
   private ServiceUser serviceUser;
   
-  @Autowired
   private Validator validator;
-  
-  @Autowired
   private MapperDto mapper;
 
+  public EditComputerServlet (ServiceComputer serviceComputer, ServiceCompany serviceCompany, ServiceUser serviceUser,
+                              Validator validator, MapperDto mapper) {
+    this.serviceComputer = serviceComputer;
+    this.serviceCompany = serviceCompany;
+    this.serviceUser = serviceUser;
+    this.validator = validator;
+    this.mapper = mapper;
+  }
+  
   @GetMapping
   protected ModelAndView doGet(WebRequest request, ModelAndView modelView, Principal principal) throws SQLException {
     if (request.getParameterMap().containsKey("id")) { 

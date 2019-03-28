@@ -6,7 +6,6 @@ import java.security.Principal;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,15 +25,16 @@ import service.ServiceUser;
 @RequestMapping("/")
 public class ComputerServlet {
 
-  @Autowired
   private ServiceComputer serviceComputer;
-  
-  @Autowired
   private ServiceUser serviceUser;
   
-  @Autowired
   private MapperDto mapper;
   
+  public ComputerServlet(ServiceComputer serviceComputer, ServiceUser serviceUser, MapperDto mapper) {
+    this.serviceComputer = serviceComputer;
+    this.serviceUser = serviceUser;
+    this.mapper = mapper;
+  }
   
   @GetMapping
   public ModelAndView doGet(@RequestParam(value = "page", defaultValue = "1") String pageNumber,
@@ -42,7 +42,7 @@ public class ComputerServlet {
       int totalComputer = serviceComputer.getCount();
       int page = Integer.parseInt(pageNumber);
       List<Dto> computers = this.mapper.computersToDtos(this.serviceComputer.getComputers((page - 1) * 50));
-      String login = principal.getName(); //get logged in username
+      String login = principal.getName(); 
       User user = this.serviceUser.getUser(login);
       modelView.addObject("computers", computers);
       modelView.addObject("maxcomputer", totalComputer);
