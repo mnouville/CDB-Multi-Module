@@ -3,7 +3,7 @@ package service;
 import java.sql.SQLException;
 import java.util.List;
 
-import model.Computer;
+import dto.Dto;
 
 /**
  * Class ServiceComputer that implement every methods of ServiceComputerImpl.
@@ -17,7 +17,7 @@ public interface ServiceComputer {
    * 
    * @param c Computer
    */
-  void addComputer(Computer c) throws SQLException;
+  void addComputer(Dto c) throws SQLException;
 
   /**
    * This method delete computers by ID.
@@ -32,21 +32,21 @@ public interface ServiceComputer {
    * @param id int
    * @return an object Computer
    */
-  Computer getComputer(int id) throws SQLException;
+  Dto getComputer(int id) throws SQLException;
 
   /**
    * This method return a list of every computers in the Database.
    * 
    * @return List of Objects Computer
    */
-  List<Computer> getComputers() throws SQLException;
+  List<Dto> getComputers() throws SQLException;
 
   /**
    * This method return a list of every computers in the Database with a begin index.
    * 
    * @return List of Objects Computer
    */
-  List<Computer> getComputers(int begin) throws SQLException;
+  List<Dto> getComputers(int begin) throws SQLException;
 
   /**
    * Return the Maximum Id in the database.
@@ -60,7 +60,7 @@ public interface ServiceComputer {
    * 
    * @param c Computer
    */
-  void updateComputer(Computer c) throws SQLException;
+  void updateComputer(Dto c) throws SQLException;
 
   /**
    * Return the number of computer in the database.
@@ -75,7 +75,7 @@ public interface ServiceComputer {
    * @param search String
    * @return List of Computer Objects
    */
-  List<Computer> searchName(String search) throws SQLException;
+  List<Dto> searchName(String search) throws SQLException;
   
   /**
    * Return a list of computers ordered by a specific column.
@@ -83,5 +83,5 @@ public interface ServiceComputer {
    * @param begin int
    * @return
    */
-  List<Computer> sortByColumn(String type, int begin, String column) throws SQLException;
+  List<Dto> sortByColumn(String type, int begin, String column) throws SQLException;
 }

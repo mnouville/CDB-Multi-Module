@@ -1,11 +1,12 @@
 package service;
 
 import dao.ComputerDao;
+import dto.Dto;
+import mappers.MapperDto;
 
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +21,14 @@ import model.Computer;
 @Service
 public class ServiceComputerImpl implements ServiceComputer {
 
-  @Autowired
   private ComputerDao computerDao;
+  
+  private MapperDto mapper;
+  
+  public ServiceComputerImpl(ComputerDao computerDao, MapperDto mapper) {
+    this.computerDao = computerDao;
+    this.setMapper(mapper);
+  }
   
   /**
    * Method for adding a computer in the database.
@@ -30,7 +37,8 @@ public class ServiceComputerImpl implements ServiceComputer {
    */
   @Override
   @Transactional
-  public void addComputer(Computer c) throws SQLException {
+  public void addComputer(Dto computerDto) throws SQLException {
+    Computer c = this.mapper.dtoToComputer(computerDto);
     this.computerDao.addComputer(c);
   }
 
@@ -52,7 +60,8 @@ public class ServiceComputerImpl implements ServiceComputer {
    */
   @Override
   @Transactional
-  public void updateComputer(Computer c) throws SQLException {
+  public void updateComputer(Dto computerDto) throws SQLException {
+    Computer c = this.mapper.dtoToComputer(computerDto);
     this.computerDao.updateComputer(c);
   }
 
@@ -63,10 +72,10 @@ public class ServiceComputerImpl implements ServiceComputer {
    */
   @Override
   @Transactional
-  public Computer getComputer(int id) throws SQLException {
+  public Dto getComputer(int id) throws SQLException {
     Computer c = this.computerDao.getComputer(id);
-
-    return c;
+    Dto computerDto = this.mapper.computerToDto(c);
+    return computerDto;
   }
 
   /**
@@ -74,10 +83,10 @@ public class ServiceComputerImpl implements ServiceComputer {
    */
   @Override
   @Transactional
-  public List<Computer> getComputers() throws SQLException {
+  public List<Dto> getComputers() throws SQLException {
     List<Computer> list = this.computerDao.getComputers();
-
-    return list;
+    List<Dto> listDto = this.mapper.computersToDtos(list);
+    return listDto;
   }
 
   /**
@@ -87,8 +96,8 @@ public class ServiceComputerImpl implements ServiceComputer {
    */
   @Override
   @Transactional
-  public List<Computer> getComputers(int begin) throws SQLException {
-    return this.computerDao.getComputers(begin);
+  public List<Dto> getComputers(int begin) throws SQLException {
+    return this.mapper.computersToDtos(this.computerDao.getComputers(begin));
   }
 
   /**
@@ -115,8 +124,8 @@ public class ServiceComputerImpl implements ServiceComputer {
    */
   @Override
   @Transactional
-  public List<Computer> searchName(String search) throws SQLException {
-    return this.computerDao.searchName(search);
+  public List<Dto> searchName(String search) throws SQLException {
+    return mapper.computersToDtos(this.computerDao.searchName(search));
   }
   
   /**
@@ -126,7 +135,15 @@ public class ServiceComputerImpl implements ServiceComputer {
    * @return List of computers
    */
   @Transactional
-  public List<Computer> sortByColumn(String type, int begin, String column) throws SQLException {
-    return this.computerDao.sortByColumn(type, begin, column);
+  public List<Dto> sortByColumn(String type, int begin, String column) throws SQLException {
+    return this.mapper.computersToDtos(this.computerDao.sortByColumn(type, begin, column));
+  }
+
+  public MapperDto getMapper() {
+    return mapper;
+  }
+
+  public void setMapper(MapperDto mapper) {
+    this.mapper = mapper;
   }
 }

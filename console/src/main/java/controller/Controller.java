@@ -1,7 +1,9 @@
 package controller;
 
 import dnl.utils.text.table.TextTable;
+import dto.Dto;
 import exceptions.ValidationException;
+import mappers.MapperDto;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -43,6 +45,9 @@ public class Controller {
   
   @Autowired
   private Validator validator;
+  
+  @Autowired
+  private MapperDto mapper;
   
   private static final Logger LOG = LoggerFactory.getLogger(Controller.class);
   private View view;
@@ -238,7 +243,7 @@ public class Controller {
         // check if all informations are valid
         this.validator.verifyComputer(c);
         LOG.info("Computer Add Request : " + c.toString());
-        this.serviceComputer.addComputer(c);
+        this.serviceComputer.addComputer(this.mapper.computerToDto(c));
         this.getView().computerAdded();
         launchMenuComputer();
       } else {
@@ -330,7 +335,7 @@ public class Controller {
           // check if all informations are valid
           this.validator.verifyComputer(c);
           LOG.info("Request update Computer : " + c.getId() + " with datas : " + c.toString());
-          this.serviceComputer.updateComputer(c);
+          this.serviceComputer.updateComputer(this.mapper.computerToDto(c));
           this.getView().computerUpdated();
           launchMenuComputer();
           
@@ -361,7 +366,7 @@ public class Controller {
     try {
       int id = Integer.parseInt(sc.nextLine());
       LOG.info("Request computer : " + id);
-      Computer c = this.serviceComputer.getComputer(id);
+      Computer c = this.mapper.dtoToComputer(this.serviceComputer.getComputer(id));
       this.getView().displayComputer(c);
       launchMenuComputer();
     } catch (NumberFormatException nfe) {
@@ -378,14 +383,14 @@ public class Controller {
    */
   public void getComputers() throws SQLException, ValidationException {
     LOG.info("Request Computers List");
-    List<Computer> computers = this.serviceComputer.getComputers();
+    List<Dto> computers = this.serviceComputer.getComputers();
     Object[][] data = new Object[computers.size()][5];
     for (int i = 0; i < computers.size(); i++) {
       data[i][0] = computers.get(i).getId();
       data[i][1] = computers.get(i).getName();
       data[i][2] = computers.get(i).getIntroduced();
       data[i][3] = computers.get(i).getDiscontinued();
-      data[i][4] = computers.get(i).getCompany().getId();
+      data[i][4] = computers.get(i).getCompanyId();
     }
     TextTable table = new TextTable(
         new String[] { "ID", "Name", "Introduced", "Discontinued", "Company_Id" }, data);

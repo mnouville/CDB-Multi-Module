@@ -38,6 +38,11 @@
 		    <version>${cdb.version}</version>
 		</dependency>
 		<dependency>
+		    <groupId>Computer-Database</groupId>
+		    <artifactId>persistence</artifactId>
+		    <version>${cdb.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.massisframework</groupId>
 			<artifactId>j-text-utils</artifactId>
 			<version>${j-text-utils.version}</version>

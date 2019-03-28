@@ -11,20 +11,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import model.User;
+import model.Company;
 import model.Computer;
-import service.ServiceCompany;
 
 @Component
 public class MapperDto {
-
-  private static MapperDto instance;
-  
-  @Autowired
-  private ServiceCompany serviceCompany;
   
   /**
    * Method that convert a Computer to a DTO.
@@ -65,15 +59,13 @@ public class MapperDto {
       }
 
       if (dto.getCompanyId() != null) {
-        c.setCompany(this.serviceCompany.getCompany(Integer.parseInt(dto.getCompanyId())));
+        c.setCompany(new Company(Integer.parseInt(dto.getCompanyId()),dto.getCompanyname()));
       }
     } catch (ParseException e) {
       e.printStackTrace();
     } catch (NumberFormatException e) {
       e.printStackTrace();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
+    } 
 
     return c;
   }
@@ -130,17 +122,6 @@ public class MapperDto {
       list.add(userToUserDto(users.get(i)));
     }
     return list;
-  }
-
-  /**
-   * Get the unique instance of MapperDto.
-   * @return MapperDto
-   */
-  public static MapperDto getInstance() {
-    if (instance == null) {
-      instance = new MapperDto();
-    }
-    return instance;
   }
   
 }

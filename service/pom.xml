@@ -27,12 +27,12 @@
 	<dependencies>
 		<dependency>
 		    <groupId>Computer-Database</groupId>
-		    <artifactId>persistence</artifactId>
+		    <artifactId>binding</artifactId>
 		    <version>${cdb.version}</version>
 		</dependency>
 		<dependency>
 		    <groupId>Computer-Database</groupId>
-		    <artifactId>core</artifactId>
+		    <artifactId>persistence</artifactId>
 		    <version>${cdb.version}</version>
 		</dependency>
 		<dependency>
