@@ -6,10 +6,10 @@ import java.security.Principal;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -20,7 +20,7 @@ import service.ServiceUser;
 /**
  * Servlet implementation class ComputerServlet.
  */
-@Controller
+@RestController
 @RequestMapping("/")
 public class ComputerServlet {
 
@@ -91,4 +91,6 @@ public class ComputerServlet {
       modelView.setViewName("Dashboard");
       return modelView;
   }
+  
+  
 }

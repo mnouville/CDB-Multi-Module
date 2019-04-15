@@ -57,7 +57,7 @@ public class MapperDto {
         Date discontinued = formatter.parse(dto.getDiscontinued());
         c.setDiscontinued(discontinued);
       }
-
+      
       if (dto.getCompanyId() != null) {
         c.setCompany(new Company(Integer.parseInt(dto.getCompanyId()),dto.getCompanyname()));
       }

@@ -21,6 +21,7 @@
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<jstl.version>1.2</jstl.version>
 		<jquery.version>3.3.1</jquery.version>
+		<jackson.library.version>2.9.8</jackson.library.version>
 	</properties>
 	
 	<dependencies>
@@ -54,6 +55,11 @@
 		    <artifactId>jquery</artifactId>
 		    <version>${jquery.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.library.version}</version>
+        </dependency>
 	</dependencies>
 
 	<build>
