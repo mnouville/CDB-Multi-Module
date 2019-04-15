@@ -11,20 +11,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import model.User;
+import model.Company;
 import model.Computer;
-import service.ServiceCompany;
 
 @Component
 public class MapperDto {
-
-  private static MapperDto instance;
-  
-  @Autowired
-  private ServiceCompany serviceCompany;
   
   /**
    * Method that convert a Computer to a DTO.
@@ -63,17 +57,15 @@ public class MapperDto {
         Date discontinued = formatter.parse(dto.getDiscontinued());
         c.setDiscontinued(discontinued);
       }
-
+      
       if (dto.getCompanyId() != null) {
-        c.setCompany(this.serviceCompany.getCompany(Integer.parseInt(dto.getCompanyId())));
+        c.setCompany(new Company(Integer.parseInt(dto.getCompanyId()),dto.getCompanyname()));
       }
     } catch (ParseException e) {
       e.printStackTrace();
     } catch (NumberFormatException e) {
       e.printStackTrace();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
+    } 
 
     return c;
   }
@@ -109,9 +101,9 @@ public class MapperDto {
   }
   
   public UserDto userToUserDto(User user) {
-    return new UserDto(user.getId()+"", user.getLogin(), user.getPassword(), user.getFirstname(), user.getLastname(), user.getLastname(),
-                       user.getEnabled()+"", user.getAccountNonExpired()+"", user.getCredentialsNonExpired()+"", 
-                       user.getAccountNonBlocked()+"" );
+    return new UserDto(user.getId()+"", user.getLogin(), user.getPassword(), user.getFirstname(), user.getLastname(),
+                       user.getEmail(), user.getRole()+"", user.getEnabled()+"", user.getAccountNonExpired()+"", 
+                       user.getCredentialsNonExpired()+"", user.getAccountNonBlocked()+"" );
   }
   
   public User dtoToUser(UserDto user) {
@@ -120,7 +112,7 @@ public class MapperDto {
     boolean accountNonExpired = user.getAccountNonExpired() == "true" ? true : false;
     boolean credentialsNonExpired = user.getCredentialsNonExpired() == "true" ? true : false;
     boolean accountNonBlocked = user.getAccountNonLocked() == "true" ? true : false;
-    return new User(id,user.getLogin(), user.getPassword(), user.getFirstname(), user.getLastname(), user.getEmail(),
+    return new User(id,user.getLogin(), user.getPassword(), user.getFirstname(), user.getLastname(), user.getEmail(),Integer.parseInt(user.getRole()),
                        enabled, accountNonExpired, credentialsNonExpired, accountNonBlocked);
   }
   
@@ -130,17 +122,6 @@ public class MapperDto {
       list.add(userToUserDto(users.get(i)));
     }
     return list;
-  }
-
-  /**
-   * Get the unique instance of MapperDto.
-   * @return MapperDto
-   */
-  public static MapperDto getInstance() {
-    if (instance == null) {
-      instance = new MapperDto();
-    }
-    return instance;
   }
   
 }

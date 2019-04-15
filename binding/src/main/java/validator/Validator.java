@@ -4,11 +4,9 @@ import java.sql.SQLException;
 
 import model.Computer;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import exceptions.ValidationException;
-import service.ServiceCompany;
 
 /**
  * Class Validator.java
@@ -18,9 +16,6 @@ import service.ServiceCompany;
 
 @Component
 public class Validator {
-  
-  @Autowired
-  private ServiceCompany serviceCompany;
   
   /**
    * Method for the validation of computer id.
@@ -62,26 +57,10 @@ public class Validator {
     }
   }
   
-  /**
-   * Method for the validation of company id Parameter.
-   * @param id int
-   */
-  public void verifyValidCompanyId(int id) throws SQLException, ValidationException {
-    try {
-      // check if the id is a valid company that exist in the table company
-      if (!serviceCompany.companyExist(id)) {
-        throw new ValidationException("the computer is null");
-      } 
-    } catch (NumberFormatException nfe) {
-      throw new ValidationException("the computer is null");
-    }
-  }
-  
   public void verifyComputer(Computer c) throws ValidationException, SQLException {
     this.verifyIdNotNull(c.getId());
     this.verifyName(c.getName());
     this.verifyIntroBeforeDisco(c);
     this.verifyComputerNotNull(c);
-    this.verifyValidCompanyId(c.getCompany().getId());
   }
 }

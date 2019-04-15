@@ -10,7 +10,6 @@ import model.Computer;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.TransactionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,12 +59,6 @@ public class ComputerDaoImpl implements ComputerDao {
     this.sessionFactory = sessionFactory;
     this.session = this.sessionFactory.openSession();
   }
-  
-  public void validateSession() {
-    if(!this.session.isOpen()) {
-      this.session = this.sessionFactory.openSession();
-    }
-  }
 
   /**
    * This method take a Computer in parameter and add it into the Database.
@@ -74,16 +67,10 @@ public class ComputerDaoImpl implements ComputerDao {
    */
   @Override
   public void addComputer(Computer c) throws SQLException {
-    validateSession();
-    Transaction tx = this.session.getTransaction();
-    
     try {
-      tx = session.beginTransaction();
-      session.saveOrUpdate(c);        
-      tx.commit();
+      this.sessionFactory.getCurrentSession().saveOrUpdate(c);    
     } catch (TransactionException hibernateException) {
       try {
-        tx.rollback();
       } catch(RuntimeException runtimeEx){
         LOG.error("Couldn’t Roll Back Transaction", runtimeEx);
       }
@@ -102,8 +89,7 @@ public class ComputerDaoImpl implements ComputerDao {
   @SuppressWarnings("unchecked")
   @Override
   public List<Computer> getComputers() throws SQLException {
-    validateSession();
-    List<Computer> result = (List<Computer>) this.session.createQuery(getall).list();
+    List<Computer> result = (List<Computer>) this.sessionFactory.getCurrentSession().createQuery(getall).list();
     return result;
   }
 
@@ -115,9 +101,8 @@ public class ComputerDaoImpl implements ComputerDao {
   @SuppressWarnings("unchecked")
   @Override
   public List<Computer> getComputers(int begin) throws SQLException {
-    validateSession();
     Query<Computer> query;
-    query = this.session.createQuery(getall);
+    query = this.sessionFactory.getCurrentSession().createQuery(getall);
     query.setMaxResults(50);
     query.setFirstResult(begin);
     List<Computer> result = (List<Computer>) query.list();
@@ -132,18 +117,13 @@ public class ComputerDaoImpl implements ComputerDao {
   @SuppressWarnings("unchecked")
   @Override
   public void deleteComputer(int id) throws SQLException {
-    validateSession();
-    Transaction tx = this.session.getTransaction();
-    
+
     try {
-      tx = this.session.beginTransaction();
-      Query<Computer> query = this.session.createQuery(delete);
+      Query<Computer> query = this.sessionFactory.getCurrentSession().createQuery(delete);
       query.setParameter("id", id);
       query.executeUpdate();
-      tx.commit();
     } catch (TransactionException hibernateException) {
       try {
-        tx.rollback();
       } catch(RuntimeException runtimeEx){
         LOG.error("Couldn’t Roll Back Transaction", runtimeEx);
       }
@@ -162,18 +142,15 @@ public class ComputerDaoImpl implements ComputerDao {
   @SuppressWarnings("unchecked")
   @Override
   public Computer getComputer(int i) throws SQLException {
-    validateSession();
-    Transaction tx = this.session.getTransaction();
+    Query<Computer> query;
     
     try {
-      tx = this.session.beginTransaction();
-      Query<Computer> query = this.session.createQuery(get);
+      query = this.sessionFactory.getCurrentSession().createQuery(get);
       query.setParameter("id", i);
       List<Computer> result = (List<Computer>) query.list();
       return result.get(0);
     } catch (TransactionException hibernateException) {
       try {
-        tx.rollback();
       } catch(RuntimeException runtimeEx){
         LOG.error("Couldn’t Roll Back Transaction", runtimeEx);
       }
@@ -193,22 +170,17 @@ public class ComputerDaoImpl implements ComputerDao {
   @SuppressWarnings("unchecked")
   @Override
   public void updateComputer(Computer c) throws SQLException {
-    validateSession();
-    Transaction tx = this.session.getTransaction();
     
     try {
-      tx = this.session.beginTransaction();
-      Query<Computer> query = this.session.createQuery(update);
+      Query<Computer> query = this.sessionFactory.getCurrentSession().createQuery(update);
       query.setParameter("name", c.getName());
       query.setParameter("intro", c.getIntroduced()  == null ? null : new Timestamp(c.getIntroduced().getTime()));
       query.setParameter("disc", c.getDiscontinued() == null ? null : new Timestamp(c.getDiscontinued().getTime()));
       query.setParameter("companyid", c.getCompany().getId());
       query.setParameter("id", c.getId());
       query.executeUpdate();
-      tx.commit();
     } catch (TransactionException hibernateException) {
       try {
-        tx.rollback();
       } catch(RuntimeException runtimeEx){
         LOG.error("Couldn’t Roll Back Transaction", runtimeEx);
       }
@@ -229,8 +201,7 @@ public class ComputerDaoImpl implements ComputerDao {
   @Override
   public int getMaxId() throws SQLException {
     LOG.info("MAX ID requested");
-    validateSession();
-    Query query = this.session.createQuery(maxid);
+    Query query = this.sessionFactory.getCurrentSession().createQuery(maxid);
     return Integer.parseInt(query.list().get(0).toString())+1;
   }
 
@@ -242,8 +213,7 @@ public class ComputerDaoImpl implements ComputerDao {
   @SuppressWarnings("rawtypes")
   public int getCount() throws SQLException {
     LOG.info("ROW COUNT requested");
-    validateSession();
-    Query query = this.session.createQuery(count);
+    Query query = this.sessionFactory.getCurrentSession().createQuery(count);
     return Integer.parseInt(query.list().get(0).toString());
   }
 
@@ -252,9 +222,8 @@ public class ComputerDaoImpl implements ComputerDao {
    */
   @SuppressWarnings("unchecked")
   public List<Computer> searchName(String search) throws SQLException {
-    validateSession();
     Query<Computer> query;
-    query = this.session.createQuery(searchname + "'%" + search + "%'");
+    query = this.sessionFactory.getCurrentSession().createQuery(searchname + "'%" + search + "%'");
     List<Computer> result = (List<Computer>) query.list();
     return result;
   }
@@ -264,13 +233,12 @@ public class ComputerDaoImpl implements ComputerDao {
    */
   @SuppressWarnings("unchecked")
   public List<Computer> sortByColumn(String type, int begin, String column) throws SQLException {    
-    validateSession();
     Query<Computer> query;
     
     if (column.equals("company")) {
-      query = this.session.createQuery(sortcompanyname + " order by ISNULL(cpa.name),cpa.name " + type);
+      query = this.sessionFactory.getCurrentSession().createQuery(sortcompanyname + " order by ISNULL(cpa.name),cpa.name " + type);
     } else {
-      query = this.session.createQuery(getall + " order by " + column + " " + type);
+      query = this.sessionFactory.getCurrentSession().createQuery(getall + " order by " + column + " " + type);
     }
     
     query.setMaxResults(50);

@@ -29,7 +29,7 @@ public class Computer implements java.io.Serializable {
   private Date introduced;
   private Date discontinued;
   private Company company;
-
+  
   /**
    * Constructor of the class Computer.
    * 

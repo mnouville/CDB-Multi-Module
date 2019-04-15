@@ -16,6 +16,10 @@ public class Dto {
   private String companyid;
   private String companyname;
   
+  public Dto() {
+    
+  }
+  
   /**
    * Constructor of CdbDto class.
    * @param id String
