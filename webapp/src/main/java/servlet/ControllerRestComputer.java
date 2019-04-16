@@ -1,6 +1,10 @@
 package servlet;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,8 +51,14 @@ public class ControllerRestComputer {
   }
   
   @PostMapping(path = "/")
-  public void addMember(@RequestBody Dto dto) throws SQLException {
-      System.out.println(dto.toString());
+  public void addMember(@RequestBody Dto dto) throws SQLException, ParseException {
+      DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+      Date intro = formatter.parse(dto.getIntroduced().replace('/', '-'));
+      Date disc = formatter.parse(dto.getDiscontinued().replace('/', '-'));
+      formatter = new SimpleDateFormat("yyyy-MM-dd");
+      dto.setIntroduced(formatter.format(intro));
+      dto.setDiscontinued(formatter.format(disc));
+      
       this.serviceComputer.addComputer(dto);
   }
   
