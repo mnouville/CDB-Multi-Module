@@ -1,12 +1,16 @@
-package servlet;
+package restcontrollers;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,10 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dto.Dto;
+import model.Token;
 import service.ServiceComputer;
 
 @RestController
-@RequestMapping("/webservice/computer/")
+@RequestMapping("/api/computers/")
+@CrossOrigin
 public class ControllerRestComputer {
   
   private ServiceComputer serviceComputer;
@@ -31,19 +37,25 @@ public class ControllerRestComputer {
   }
   
   @GetMapping(value = "/{id}")
-  public Dto getComputerRest(@PathVariable String id) throws NumberFormatException, SQLException {
+  public Dto getComputer(@PathVariable String id) throws NumberFormatException, SQLException {
       Dto computer = this.serviceComputer.getComputer(Integer.parseInt(id));
       return computer;
   }
   
   @GetMapping(value = "/")
-  public List<Dto> getComputersRest() throws NumberFormatException, SQLException {
+  public List<Dto> getComputers(HttpServletRequest req) throws Exception {
+      /*Token token = new Token(req.getHeader("authorization"));
+      if ( token.isValidToken()) {
+        List<Dto> listComputers = this.serviceComputer.getComputers();
+        return listComputers;
+      } */
       List<Dto> listComputers = this.serviceComputer.getComputers();
       return listComputers;
+    
   }
   
-  @GetMapping(value = "/page/")
-  public List<Dto> getComputersRest(@RequestParam(value = "page", defaultValue = "1") String pageNumber) throws SQLException {
+  @GetMapping(value = "/page")
+  public List<Dto> getComputersByPage(@RequestParam(value = "page", defaultValue = "1") String pageNumber) throws SQLException {
       int page = Integer.parseInt(pageNumber);
       int offset = (page - 1) * 50;
       List<Dto> listComputers = this.serviceComputer.getComputers(offset);

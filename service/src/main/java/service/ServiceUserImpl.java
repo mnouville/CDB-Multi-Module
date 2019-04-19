@@ -9,18 +9,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import dao.UserDao;
-import model.User;
+import dto.UserDto;
+import mappers.MapperDto;
 
 @Service
 public class ServiceUserImpl implements ServiceUser {
 
   @Autowired
   private UserDao userDao;
+  
+  @Autowired
+  private MapperDto mapper;
 
   @Override
   @Transactional
-  public User getUser(String login) throws SQLException {
-    return this.userDao.getUser(login);
+  public UserDto getUser(String login) throws SQLException {
+    return this.mapper.userToUserDto(this.userDao.getUser(login));
   }
   
   @Override

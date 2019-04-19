@@ -1,6 +1,7 @@
 package servlet;
 
 import dto.Dto;
+import dto.UserDto;
 
 import java.security.Principal;
 import java.sql.SQLException;
@@ -13,14 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import model.User;
 import service.ServiceComputer;
 import service.ServiceUser;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Servlet implementation class ComputerServlet.
  */
 @RestController
+@ApiIgnore
 @RequestMapping("/")
 public class ComputerServlet {
 
@@ -39,7 +41,7 @@ public class ComputerServlet {
       int page = Integer.parseInt(pageNumber);
       List<Dto> computers = this.serviceComputer.getComputers((page - 1) * 50);
       String login = principal.getName(); 
-      User user = this.serviceUser.getUser(login);
+      UserDto user = this.serviceUser.getUser(login);
       modelView.addObject("computers", computers);
       modelView.addObject("maxcomputer", totalComputer);
       modelView.addObject("user",user);

@@ -112,6 +112,7 @@ public class MapperDto {
     boolean accountNonExpired = user.getAccountNonExpired() == "true" ? true : false;
     boolean credentialsNonExpired = user.getCredentialsNonExpired() == "true" ? true : false;
     boolean accountNonBlocked = user.getAccountNonLocked() == "true" ? true : false;
+    
     return new User(id,user.getLogin(), user.getPassword(), user.getFirstname(), user.getLastname(), user.getEmail(),Integer.parseInt(user.getRole()),
                        enabled, accountNonExpired, credentialsNonExpired, accountNonBlocked);
   }

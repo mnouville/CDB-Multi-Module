@@ -1,8 +1,9 @@
-package servlet;
+package restcontrollers;
 
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +14,8 @@ import model.Company;
 import service.ServiceCompany;
 
 @RestController
-@RequestMapping("/webservice/company/")
+@RequestMapping("/api/companies/")
+@CrossOrigin
 public class ControllerRestCompany {
 
   private ServiceCompany serviceCompany;

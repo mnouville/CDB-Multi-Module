@@ -39,7 +39,7 @@ import model.Computer;
 import model.User;
 
 @Configuration
-@ComponentScan({"dao","service","servlet","mappers","validator","controller","springconfig"})
+@ComponentScan({"dao","service","servlet","mappers","validator","controller","springconfig","restcontrollers"})
 @PropertySource(value = { "classpath:hikariconfig.properties" })
 @EnableWebMvc
 @EnableTransactionManagement
@@ -114,6 +114,8 @@ public class SpringConfig implements WebApplicationInitializer, WebMvcConfigurer
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
       registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+      registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+      registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
     
     
@@ -145,4 +147,5 @@ public class SpringConfig implements WebApplicationInitializer, WebMvcConfigurer
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeInterceptor());
     }
+    
 }

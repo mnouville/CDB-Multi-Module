@@ -22,6 +22,8 @@
 		<jstl.version>1.2</jstl.version>
 		<jquery.version>3.3.1</jquery.version>
 		<jackson.library.version>2.9.8</jackson.library.version>
+		<springfox.version>2.9.2</springfox.version>
+		<jjwt.version>0.9.0</jjwt.version>
 	</properties>
 	
 	<dependencies>
@@ -55,11 +57,26 @@
 		    <artifactId>jquery</artifactId>
 		    <version>${jquery.version}</version>
 		</dependency>
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger2</artifactId>
+		    <version>${springfox.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger-ui</artifactId>
+		    <version>${springfox.version}</version>
+		</dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.library.version}</version>
         </dependency>
+        <dependency>
+	        <groupId>io.jsonwebtoken</groupId>
+	        <artifactId>jjwt</artifactId>
+	        <version>${jjwt.version}</version>
+	    </dependency>
 	</dependencies>
 
 	<build>
