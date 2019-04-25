@@ -47,6 +47,13 @@ public interface ServiceComputer {
    * @return List of Objects Computer
    */
   List<Dto> getComputers(int begin) throws SQLException;
+  
+  /**
+   * This method return a list of every computers in the Database with a begin index and a limit.
+   * 
+   * @return List of Objects Computer
+   */
+  List<Dto> getComputers(int begin, int limit) throws SQLException;
 
   /**
    * Return the Maximum Id in the database.
@@ -75,7 +82,7 @@ public interface ServiceComputer {
    * @param search String
    * @return List of Computer Objects
    */
-  List<Dto> searchName(String search) throws SQLException;
+  List<Dto> searchName(String search, int page, int limit) throws SQLException;
   
   /**
    * Return a list of computers ordered by a specific column.
@@ -83,5 +90,5 @@ public interface ServiceComputer {
    * @param begin int
    * @return
    */
-  List<Dto> sortByColumn(String type, int begin, String column) throws SQLException;
+  List<Dto> sortByColumn(String type, int begin, String column, String search, int limit) throws SQLException;
 }

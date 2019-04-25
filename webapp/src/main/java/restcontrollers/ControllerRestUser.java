@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +27,7 @@ import service.ServiceUser;
 
 @RestController
 @RequestMapping("/api/users/")
+@CrossOrigin
 public class ControllerRestUser {
 
   private static final Logger LOG = LoggerFactory.getLogger(ControllerRestUser.class);
@@ -35,15 +39,17 @@ public class ControllerRestUser {
   private MapperDto mapper;
   
   @PostMapping(path = "/login")
-  public String authenticate(@RequestBody UserDto user, HttpServletRequest req ) 
+  public ResponseEntity<String> authenticate(@RequestBody UserDto user) 
                                  throws SQLException, ParseException, IOException, ServletException {
       Token token = new Token();
-      System.out.println(req.getHeader("authorization"));
+      
       try {
         if (this.serviceUser.userExists(user.getLogin(),user.getPassword())) {
             user = this.serviceUser.getUser(user.getLogin());
             token = new Token(this.mapper.dtoToUser(user));
-        } 
+        } else {
+          return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }
       } catch (SQLException e) {
         LOG.error("SQL Exception : " + e.toString());
       } catch (InvalidKeyException e) {
@@ -51,8 +57,26 @@ public class ControllerRestUser {
       } catch (NoSuchAlgorithmException e) {
         LOG.error("No Such Algorithm Exception : " + e.toString());
       }  
-      
+
+      return new ResponseEntity<String>("{ \"token\":\"" + token.getValue() + "\"}",HttpStatus.OK);
+  }
+  
+  @PostMapping(path = "/refreshtoken")
+  public String refreshToken(HttpServletRequest req) throws Exception {
+      Token token = new Token(req.getHeader("authorization"));
+      token = token.refreshToken();
       return token.getValue();
+  }
+  
+  @PostMapping(path = "/logout")
+  public String logout(HttpServletRequest req) {
+      Token token = new Token();
+      return token.getValue();
+  }
+  
+  @PostMapping(path = "/register") 
+  public void register(@RequestBody UserDto user) throws SQLException {
+      this.serviceUser.addUser(user);
   }
   
 }

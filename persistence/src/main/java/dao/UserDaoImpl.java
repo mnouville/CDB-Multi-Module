@@ -30,6 +30,7 @@ public class UserDaoImpl implements UserDao {
   
   private final String get = "from User where login = :login";
   private final String count = "SELECT COUNT(id) FROM User";
+  private final String maxid = "SELECT MAX(id) FROM User";
   
   private HikariDataSource dataSource;
   private SessionFactory sessionFactory;
@@ -86,6 +87,30 @@ public class UserDaoImpl implements UserDao {
     return null;
   }
   
+  @Override
+  public void addUser(User user) throws SQLException {
+    try {
+      if (user.getId() == 0) {
+        user.setId(getMaxId());
+      }
+      user.setPassword(hashPass(user.getPassword()));
+      this.sessionFactory.getCurrentSession().saveOrUpdate(user);    
+    } catch (TransactionException hibernateException) {
+      try {
+      } catch(RuntimeException runtimeEx){
+        LOG.error("Couldn’t Roll Back Transaction", runtimeEx);
+      }
+      hibernateException.printStackTrace();
+    } catch (InvalidKeyException e) {
+      e.printStackTrace();
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+    } finally {
+      session.close();
+    }  
+    LOG.info("User ADDED");
+  }
+  
   @SuppressWarnings("rawtypes")
   @Override
   public boolean userExits(String login, String password) throws SQLException, InvalidKeyException, NoSuchAlgorithmException {
@@ -94,6 +119,14 @@ public class UserDaoImpl implements UserDao {
     validateSession();
     Query query = this.session.createQuery(count + " where login like '" + login + "' and password like '" + hashPassword + "'");
     return (Integer.parseInt(query.list().get(0).toString())>0);
+  }
+  
+  @SuppressWarnings("rawtypes")
+  @Override
+  public int getMaxId() throws SQLException {
+    LOG.info("MAX ID requested");
+    Query query = this.sessionFactory.getCurrentSession().createQuery(maxid);
+    return Integer.parseInt(query.list().get(0).toString())+1;
   }
   
   public String hashPass(String s) throws NoSuchAlgorithmException, InvalidKeyException {

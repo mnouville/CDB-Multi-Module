@@ -108,6 +108,17 @@ public class ComputerDaoImpl implements ComputerDao {
     List<Computer> result = (List<Computer>) query.list();
     return result;
   }
+  
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Computer> getComputers(int begin, int limit) throws SQLException {
+    Query<Computer> query;
+    query = this.sessionFactory.getCurrentSession().createQuery(getall);
+    query.setMaxResults(limit);
+    query.setFirstResult(begin);
+    List<Computer> result = (List<Computer>) query.list();
+    return result;
+  }
 
   /**
    * This method delete computers by ID.
@@ -221,9 +232,12 @@ public class ComputerDaoImpl implements ComputerDao {
    * Method that sort all computers by name.
    */
   @SuppressWarnings("unchecked")
-  public List<Computer> searchName(String search) throws SQLException {
+  public List<Computer> searchName(String search, int page, int limit) throws SQLException {
+    int offset = (page - 1) * limit;
     Query<Computer> query;
     query = this.sessionFactory.getCurrentSession().createQuery(searchname + "'%" + search + "%'");
+    query.setMaxResults(limit);
+    query.setFirstResult(offset);
     List<Computer> result = (List<Computer>) query.list();
     return result;
   }
@@ -232,16 +246,16 @@ public class ComputerDaoImpl implements ComputerDao {
    * Method that sort all computers by introduced.
    */
   @SuppressWarnings("unchecked")
-  public List<Computer> sortByColumn(String type, int begin, String column) throws SQLException {    
+  public List<Computer> sortByColumn(String type, int begin, String column, String search, int limit) throws SQLException {    
     Query<Computer> query;
     
     if (column.equals("company")) {
-      query = this.sessionFactory.getCurrentSession().createQuery(sortcompanyname + " order by ISNULL(cpa.name),cpa.name " + type);
+      query = this.sessionFactory.getCurrentSession().createQuery(sortcompanyname + " WHERE name like '%" + search + "%' order by ISNULL(cpa.name),cpa.name " + type);
     } else {
-      query = this.sessionFactory.getCurrentSession().createQuery(getall + " order by " + column + " " + type);
+      query = this.sessionFactory.getCurrentSession().createQuery(getall + " WHERE name like '%" + search + "%' order by " + column + " " + type);
     }
     
-    query.setMaxResults(50);
+    query.setMaxResults(limit);
     query.setFirstResult(begin);
     List<Computer> result = (List<Computer>) query.list();
     LOG.info("Request succesfully executed (sort by column) size : " + result.size());

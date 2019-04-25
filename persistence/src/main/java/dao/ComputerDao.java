@@ -51,6 +51,13 @@ public interface ComputerDao {
   List<Computer> getComputers(int begin) throws SQLException;
 
   /**
+   * This method return a list of every computers in the Database with a begin index and a limit.
+   * 
+   * @return List of Objects Computer
+   */
+  List<Computer> getComputers(int begin, int limit) throws SQLException;
+  
+  /**
    * Return the Maximum Id in the database.
    * 
    * @return Int that correspond to the Max Id
@@ -77,7 +84,7 @@ public interface ComputerDao {
    * @param search String
    * @return List of Computer Objects
    */
-  List<Computer> searchName(String search) throws SQLException;
+  List<Computer> searchName(String search, int page, int limit) throws SQLException;
   
   /**
    * Return a list of computers ordered by Company Name.
@@ -85,5 +92,5 @@ public interface ComputerDao {
    * @param begin int
    * @return
    */
-  List<Computer> sortByColumn(String type, int begin, String column) throws SQLException;
+  List<Computer> sortByColumn(String type, int begin, String column, String search, int limit) throws SQLException;
 }

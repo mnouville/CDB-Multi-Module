@@ -3,6 +3,7 @@ package validator;
 import java.sql.SQLException;
 
 import model.Computer;
+import model.User;
 
 import org.springframework.stereotype.Component;
 
@@ -54,6 +55,14 @@ public class Validator {
   public void verifyComputerNotNull(Computer computer) throws ValidationException {
     if(computer == null) {
       throw new ValidationException("the computer is null");
+    }
+  }
+  
+  public void verifyUser(User user) throws ValidationException {
+    if ( user.getLogin().equals("") ) {
+      throw new ValidationException("Login Invalid");
+    } else if ( user.getPassword().equals("") ) {
+      throw new ValidationException("Login Invalid");
     }
   }
   

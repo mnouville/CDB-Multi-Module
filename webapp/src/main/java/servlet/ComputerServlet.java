@@ -58,7 +58,7 @@ public class ComputerServlet {
       int totalComputer = serviceComputer.getCount();
       int page = Integer.parseInt(pageNumber);
       int offset = (page - 1) * 50;
-      List<Dto> computers = this.serviceComputer.sortByColumn(type, offset,sort);
+      List<Dto> computers = this.serviceComputer.sortByColumn(type, offset, sort, "");
       modelView.addObject("computers", computers);
       modelView.addObject("maxcomputer", totalComputer);
       if (type.equals("ASC")) {

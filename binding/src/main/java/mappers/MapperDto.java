@@ -27,10 +27,10 @@ public class MapperDto {
    */
   public Dto computerToDto(Computer c) throws SQLException {
     return new Dto(c.getId() + "",c.getName(), 
-                      parseDateToString(c.getIntroduced()),
-                      parseDateToString(c.getDiscontinued()),
-                      c.getCompany() != null ? c.getCompany().getId() + "" : null,
-                      c.getCompany() != null ? c.getCompany().getName() : null);
+                   parseDateToString(c.getIntroduced()),
+                   parseDateToString(c.getDiscontinued()),
+                   c.getCompany() != null ? c.getCompany().getId() + "" : null,
+                   c.getCompany() != null ? c.getCompany().getName() : null);
   }
   
   /**
@@ -42,7 +42,7 @@ public class MapperDto {
     Computer c = new Computer();
     
     try {
-      int id = Integer.parseInt(dto.getId());
+      int id = dto.getId() != null ? Integer.parseInt(dto.getId()) : 0;
       c.setId(id);
       c.setName(dto.getName());
 
@@ -107,7 +107,7 @@ public class MapperDto {
   }
   
   public User dtoToUser(UserDto user) {
-    int id = Integer.parseInt(user.getId());
+    int id = user.getId() != null ? Integer.parseInt(user.getId()) : 0;
     boolean enabled = user.getEnabled() == "true" ? true : false;
     boolean accountNonExpired = user.getAccountNonExpired() == "true" ? true : false;
     boolean credentialsNonExpired = user.getCredentialsNonExpired() == "true" ? true : false;
