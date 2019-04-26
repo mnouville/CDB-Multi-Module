@@ -86,19 +86,15 @@ public class ControllerRestComputer {
       Token token = new Token(req.getHeader("authorization"));
       
       if ( token.isValidToken()) {
-          DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+          DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
           
           if (!(dto.getIntroduced().isEmpty()) && dto.getIntroduced() != null ) {
             Date intro = formatter.parse(dto.getIntroduced().replace('/', '-'));
-            formatter = new SimpleDateFormat("yyyy-MM-dd");
             dto.setIntroduced(formatter.format(intro));
           } 
           
-          formatter = new SimpleDateFormat("dd-MM-yyyy");
-          
           if (!(dto.getDiscontinued().isEmpty()) && dto.getDiscontinued() != null ) {
             Date disc = formatter.parse(dto.getDiscontinued().replace('/', '-'));
-            formatter = new SimpleDateFormat("yyyy-MM-dd");
             dto.setDiscontinued(formatter.format(disc));
           }
           
@@ -123,19 +119,15 @@ public class ControllerRestComputer {
       Token token = new Token(req.getHeader("authorization"));
       
       if ( token.isValidToken()) {
-          DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+          DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
   
           if (!(dto.getIntroduced().isEmpty()) && dto.getIntroduced() != null ) {
             Date intro = formatter.parse(dto.getIntroduced().replace('/', '-'));
-            formatter = new SimpleDateFormat("yyyy-MM-dd");
             dto.setIntroduced(formatter.format(intro));
           } 
           
-          formatter = new SimpleDateFormat("dd-MM-yyyy");
-          
           if (!(dto.getDiscontinued().isEmpty()) && dto.getDiscontinued() != null ) {
             Date disc = formatter.parse(dto.getDiscontinued().replace('/', '-'));
-            formatter = new SimpleDateFormat("yyyy-MM-dd");
             dto.setDiscontinued(formatter.format(disc));
           }
           

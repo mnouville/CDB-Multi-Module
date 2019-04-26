@@ -58,8 +58,8 @@ public class ComputerServlet {
       int totalComputer = serviceComputer.getCount();
       int page = Integer.parseInt(pageNumber);
       int offset = (page - 1) * 50;
-      List<Dto> computers = this.serviceComputer.sortByColumn(type, offset, sort, "");
-      modelView.addObject("computers", computers);
+      //List<Dto> computers = this.serviceComputer.sortByColumn(type, offset, sort, "");
+      //modelView.addObject("computers", computers);
       modelView.addObject("maxcomputer", totalComputer);
       if (type.equals("ASC")) {
         modelView.addObject("type", "DESC");
@@ -73,8 +73,8 @@ public class ComputerServlet {
   @RequestMapping(value = "/Search")
   public ModelAndView search(WebRequest request, ModelAndView modelView) throws SQLException {
       int totalComputer = serviceComputer.getCount();
-      List<Dto> computers = this.serviceComputer.searchName(request.getParameter("search"));
-      modelView.addObject("computers", computers);
+      //List<Dto> computers = this.serviceComputer.searchName(request.getParameter("search"));
+      //modelView.addObject("computers", computers);
       modelView.addObject("maxcomputer", totalComputer);
       modelView.setViewName("Dashboard");
       return modelView;

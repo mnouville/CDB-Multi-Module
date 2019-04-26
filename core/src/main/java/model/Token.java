@@ -26,7 +26,7 @@ public class Token {
     public Token(User user) throws UnsupportedEncodingException {
         this.value =  Jwts.builder()
                       .setSubject("users/TzMUocMF4p")
-                      .setExpiration(new Date(System.currentTimeMillis()+1500000))
+                      .setExpiration(new Date(System.currentTimeMillis()+5000000))
                       .claim("login", user.getLogin())
                       .claim("password", user.getPassword())
                       .claim("firstname", user.getFirstname() )
