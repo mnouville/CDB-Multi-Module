@@ -250,7 +250,7 @@ public class ComputerDaoImpl implements ComputerDao {
     Query<Computer> query;
     
     if (column.equals("company")) {
-      query = this.sessionFactory.getCurrentSession().createQuery(sortcompanyname + " WHERE name like '%" + search + "%' order by ISNULL(cpa.name),cpa.name " + type);
+      query = this.sessionFactory.getCurrentSession().createQuery(sortcompanyname + " WHERE cpa.name like '%" + search + "%' order by ISNULL(cpa.name),cpa.name " + type);
     } else {
       query = this.sessionFactory.getCurrentSession().createQuery(getall + " WHERE name like '%" + search + "%' order by " + column + " " + type);
     }

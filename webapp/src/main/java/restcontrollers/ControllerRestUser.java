@@ -62,10 +62,17 @@ public class ControllerRestUser {
   }
   
   @PostMapping(path = "/refreshtoken")
-  public String refreshToken(HttpServletRequest req) throws Exception {
+  public ResponseEntity<String> refreshToken(HttpServletRequest req) throws Exception {
+      System.out.println(req.getHeader("authorization"));  
       Token token = new Token(req.getHeader("authorization"));
-      token = token.refreshToken();
-      return token.getValue();
+      if ( token.isValidToken()) {
+          token = token.refreshToken();
+          System.out.println("NOUVEAU TOKEN : " + token.getValue());
+          return new ResponseEntity<String>("{ \"token\":\"" + token.getValue() + "\"}",HttpStatus.OK);
+      } else {
+          return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+      }
+      
   }
   
   @PostMapping(path = "/logout")
