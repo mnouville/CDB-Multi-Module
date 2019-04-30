@@ -1,6 +1,7 @@
 package servlet;
 
 import dto.Dto;
+import dto.UserDto;
 
 import java.security.Principal;
 import java.sql.SQLException;
@@ -13,14 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import model.User;
 import service.ServiceComputer;
 import service.ServiceUser;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Servlet implementation class ComputerServlet.
  */
 @RestController
+@ApiIgnore
 @RequestMapping("/")
 public class ComputerServlet {
 
@@ -39,7 +41,7 @@ public class ComputerServlet {
       int page = Integer.parseInt(pageNumber);
       List<Dto> computers = this.serviceComputer.getComputers((page - 1) * 50);
       String login = principal.getName(); 
-      User user = this.serviceUser.getUser(login);
+      UserDto user = this.serviceUser.getUser(login);
       modelView.addObject("computers", computers);
       modelView.addObject("maxcomputer", totalComputer);
       modelView.addObject("user",user);
@@ -56,8 +58,8 @@ public class ComputerServlet {
       int totalComputer = serviceComputer.getCount();
       int page = Integer.parseInt(pageNumber);
       int offset = (page - 1) * 50;
-      List<Dto> computers = this.serviceComputer.sortByColumn(type, offset,sort);
-      modelView.addObject("computers", computers);
+      //List<Dto> computers = this.serviceComputer.sortByColumn(type, offset, sort, "");
+      //modelView.addObject("computers", computers);
       modelView.addObject("maxcomputer", totalComputer);
       if (type.equals("ASC")) {
         modelView.addObject("type", "DESC");
@@ -71,8 +73,8 @@ public class ComputerServlet {
   @RequestMapping(value = "/Search")
   public ModelAndView search(WebRequest request, ModelAndView modelView) throws SQLException {
       int totalComputer = serviceComputer.getCount();
-      List<Dto> computers = this.serviceComputer.searchName(request.getParameter("search"));
-      modelView.addObject("computers", computers);
+      //List<Dto> computers = this.serviceComputer.searchName(request.getParameter("search"));
+      //modelView.addObject("computers", computers);
       modelView.addObject("maxcomputer", totalComputer);
       modelView.setViewName("Dashboard");
       return modelView;

@@ -14,6 +14,15 @@ public class UserDto {
   private String credentialsNonExpired;
   private String accountNonLocked; 
   
+  public UserDto() {
+    
+  }
+  
+  public UserDto(String login, String password) {
+    this.login = login;
+    this.password = password;
+  }
+  
   public UserDto(String id, String login, String password, String firstname, String lastname, String email, String role,
                  String enabled, String accountNonExpired, String credentialsNonExpired, String accountNonLocked) {
     this.id = id;
@@ -22,6 +31,7 @@ public class UserDto {
     this.firstname = firstname;
     this.lastname = lastname;
     this.email = email;
+    this.role = role;
     this.enabled = enabled;
     this.accountNonExpired = accountNonExpired;
     this.credentialsNonExpired = credentialsNonExpired;

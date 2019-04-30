@@ -14,6 +14,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
   
+    private static final String[] AUTH_WHITELIST = {
+          "/login*",
+          "/logout",
+          "/webservice/",
+          "/api/**",
+          "/v2/api-docs",
+          "/swagger-resources",
+          "/swagger-resources/**",
+          "/configuration/ui",
+          "/configuration/security",
+          "/swagger-ui.html",
+          "/webjars/**"
+    };
+  
     @Autowired
     private CdbAuthentificationProvider authProvider;
   
@@ -22,20 +36,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       auth.authenticationProvider(authProvider);
     }
  
-    @Override
     protected void configure(final HttpSecurity http) throws Exception {
-      http
-      .csrf().disable()
-      .authorizeRequests()
-      .antMatchers("/login*", "/logout","/webservice/**").permitAll() 
-      .anyRequest().authenticated()
-      .and()
-      .formLogin()  
-      .defaultSuccessUrl("/", true)
-      .and()
-      .logout()
-      .logoutUrl("/logout")
-      .deleteCookies("JSESSIONID");
+        http
+        .csrf().disable()
+        .authorizeRequests()
+        .antMatchers(AUTH_WHITELIST).permitAll() 
+        .anyRequest().authenticated()
+        .and()
+        .formLogin()  
+        .defaultSuccessUrl("/", true)
+        .and()
+        .logout()
+        .logoutUrl("/logout")
+        .deleteCookies("JSESSIONID");
     }
      
     @Bean

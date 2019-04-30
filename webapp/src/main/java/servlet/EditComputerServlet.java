@@ -12,17 +12,19 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import dto.Dto;
+import dto.UserDto;
 import exceptions.ValidationException;
 import model.Company;
-import model.User;
 import service.ServiceCompany;
 import service.ServiceComputer;
 import service.ServiceUser;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Servlet implementation class AddComputerServlet.
  */
 @Controller
+@ApiIgnore
 @RequestMapping("/EditComputer")
 public class EditComputerServlet {
 
@@ -50,7 +52,7 @@ public class EditComputerServlet {
       modelView.addObject("error","true");
     }
     String login = principal.getName(); //get logged in username
-    User user = this.serviceUser.getUser(login);
+    UserDto user = this.serviceUser.getUser(login);
     modelView.addObject("user",user);
     
     List<Company> companies;

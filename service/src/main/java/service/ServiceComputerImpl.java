@@ -99,6 +99,17 @@ public class ServiceComputerImpl implements ServiceComputer {
   public List<Dto> getComputers(int begin) throws SQLException {
     return this.mapper.computersToDtos(this.computerDao.getComputers(begin));
   }
+  
+  /**
+   * Return a list a computer base on a beginning ID and a limit.
+   * 
+   * @param begin int
+   */
+  @Override
+  @Transactional
+  public List<Dto> getComputers(int begin, int limit) throws SQLException {
+    return this.mapper.computersToDtos(this.computerDao.getComputers(begin,limit));
+  }
 
   /**
    * Method for having the max Id in the database.
@@ -124,8 +135,8 @@ public class ServiceComputerImpl implements ServiceComputer {
    */
   @Override
   @Transactional
-  public List<Dto> searchName(String search) throws SQLException {
-    return mapper.computersToDtos(this.computerDao.searchName(search));
+  public List<Dto> searchName(String search, int page, int limit) throws SQLException {
+    return mapper.computersToDtos(this.computerDao.searchName(search, page, limit));
   }
   
   /**
@@ -135,8 +146,8 @@ public class ServiceComputerImpl implements ServiceComputer {
    * @return List of computers
    */
   @Transactional
-  public List<Dto> sortByColumn(String type, int begin, String column) throws SQLException {
-    return this.mapper.computersToDtos(this.computerDao.sortByColumn(type, begin, column));
+  public List<Dto> sortByColumn(String type, int begin, String column, String search, int limit) throws SQLException {
+    return this.mapper.computersToDtos(this.computerDao.sortByColumn(type, begin, column, search, limit));
   }
 
   public MapperDto getMapper() {

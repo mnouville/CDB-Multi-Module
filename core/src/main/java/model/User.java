@@ -33,6 +33,15 @@ public class User {
     this.role = role;
   }
   
+  public User(String login, String password, String firstname, String lastname, String email, int role) {
+    this.login = login;
+    this.password = password;
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.email = email;
+    this.role = role;
+  }
+  
   public User(int id, String login, String password, String firstname, String lastname, String email, int role,
               boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked) {
     this.login = login;
